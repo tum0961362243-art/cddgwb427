@@ -208,7 +208,7 @@ const HeroSection = () => {
             <div className="absolute inset-0 bg-[#111] z-0"></div>
             {/* 真实个人照片 */}
             <img 
-              src="/个人照片.jpg" 
+              src="/profile.jpg" 
               alt="Profile" 
               className="w-full h-full object-cover opacity-80 group-hover:opacity-100 mix-blend-luminosity group-hover:mix-blend-normal transition-all duration-1000 group-hover:scale-105" 
             />
@@ -320,14 +320,15 @@ const RetroAudioPlayer = ({ title, src, sub }: any) => {
   const [showLyrics, setShowLyrics] = useState(false);
 
   useEffect(() => {
-    fetch(`/${title}.txt`)
+    const txtPath = src.replace('.mp3', '.txt');
+    fetch(txtPath)
       .then(res => {
         if (!res.ok) throw new Error("Lyrics not found");
         return res.text();
       })
       .then(text => setLyrics(text))
       .catch(err => console.error(err));
-  }, [title]);
+  }, [src]);
 
   const togglePlay = () => {
     if (isPlaying) {
@@ -437,15 +438,15 @@ const RetroAudioPlayer = ({ title, src, sub }: any) => {
 const MasterpieceWallSection = () => {
   // 复用现有的封面图片模拟作品集并添加数据
   const works = [
-    { src: "/爆款制造机/微信图片_20260426221518_900_11.png", likes: "12.5w", comments: "1.2w", favorites: "5.4w" },
-    { src: "/爆款制造机/微信图片_20260426221529_901_11.png", likes: "8.5w", comments: "4000+", favorites: "1.1w" },
-    { src: "/爆款制造机/微信图片_20260426221539_902_11.png", likes: "20w+", comments: "2w", favorites: "15w" },
-    { src: "/爆款制造机/微信图片_20260426221549_903_11.png", likes: "5.2w", comments: "1000+", favorites: "3000+" },
-    { src: "/爆款制造机/微信图片_20260426221605_904_11.png", likes: "10w+", comments: "8000+", favorites: "2.5w" },
-    { src: "/爆款制造机/微信图片_20260426221620_905_11.png", likes: "3.2w", comments: "500+", favorites: "1.2w" },
-    { src: "/爆款制造机/微信图片_20260426221630_906_11.png", likes: "6.8w", comments: "2000+", favorites: "3.3w" },
-    { src: "/爆款制造机/微信图片_20260426221641_907_11.png", likes: "15w+", comments: "1.5w", favorites: "8w" },
-    { src: "/爆款制造机/微信图片_20260426221703_908_11.png", likes: "4.5w", comments: "800+", favorites: "1.5w" }
+    { src: "/masterpieces/1.png", likes: "12.5w", comments: "1.2w", favorites: "5.4w" },
+    { src: "/masterpieces/2.png", likes: "8.5w", comments: "4000+", favorites: "1.1w" },
+    { src: "/masterpieces/3.png", likes: "20w+", comments: "2w", favorites: "15w" },
+    { src: "/masterpieces/4.png", likes: "5.2w", comments: "1000+", favorites: "3000+" },
+    { src: "/masterpieces/5.png", likes: "10w+", comments: "8000+", favorites: "2.5w" },
+    { src: "/masterpieces/6.png", likes: "3.2w", comments: "500+", favorites: "1.2w" },
+    { src: "/masterpieces/7.png", likes: "6.8w", comments: "2000+", favorites: "3.3w" },
+    { src: "/masterpieces/8.png", likes: "15w+", comments: "1.5w", favorites: "8w" },
+    { src: "/masterpieces/9.png", likes: "4.5w", comments: "800+", favorites: "1.5w" }
   ];
 
   // 每一行打乱顺序，增加随机感
@@ -542,9 +543,9 @@ const AIMusicLabSection = () => {
 
         {/* 右侧播放器列表 */}
         <div className="crt-screen relative bg-black p-8 rounded-2xl border border-white/10 shadow-[0_0_30px_rgba(0,0,0,0.8)] flex flex-col gap-4">
-          <RetroAudioPlayer title="故意" src="/故意.mp3" sub="词/曲：陈阳东 编曲：SUNO" />
-          <RetroAudioPlayer title="想见面" src="/想见面.mp3" sub="词/曲：陈阳东 编曲：SUNO" />
-          <RetroAudioPlayer title="快理我" src="/快理我.mp3" sub="词/曲：陈阳东 编曲：SUNO" />
+          <RetroAudioPlayer title="故意" src="/guyi.mp3" sub="词/曲：陈阳东 编曲：SUNO" />
+          <RetroAudioPlayer title="想见面" src="/xiangjianmian.mp3" sub="词/曲：陈阳东 编曲：SUNO" />
+          <RetroAudioPlayer title="快理我" src="/kuailiwo.mp3" sub="词/曲：陈阳东 编曲：SUNO" />
         </div>
 
       </div>
