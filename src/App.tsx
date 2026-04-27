@@ -39,6 +39,13 @@ const globalStyles = `
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   }
 
+  /* 在手机端禁用极其耗费性能的噪点特效，防止卡顿闪退 */
+  @media (max-width: 768px) {
+    .film-grain {
+      display: none;
+    }
+  }
+
   /* CRT 辉光文字 */
   .text-bloom {
     text-shadow: 0 0 10px rgba(255,248,238,0.6), 0 0 20px rgba(255,248,238,0.3), 0 0 40px rgba(255,248,238,0.1);
@@ -90,14 +97,21 @@ const globalStyles = `
 // --- 自定义跟随光标 ---
 const CustomCursor = () => {
   const [mousePos, setMousePos] = useState({ x: -100, y: -100 });
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    if (window.innerWidth <= 768) {
+      setIsMobile(true);
+      return;
+    }
     const handleMouseMove = (e: MouseEvent) => {
       setMousePos({ x: e.clientX, y: e.clientY });
     };
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
+
+  if (isMobile) return null;
 
   return (
     <motion.div
