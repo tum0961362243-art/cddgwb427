@@ -39,9 +39,12 @@ const globalStyles = `
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   }
 
-  /* 在手机端禁用极其耗费性能的噪点特效，防止卡顿闪退 */
+  /* 在手机端禁用极其耗费性能的特效，防止卡顿闪退 */
   @media (max-width: 768px) {
     .film-grain {
+      display: none;
+    }
+    .crt-screen::before {
       display: none;
     }
   }
@@ -127,7 +130,7 @@ const CustomCursor = () => {
 // --- 弹幕组件 ---
 const DanmakuItem = ({ text, top, duration, delay, isImage }: any) => (
   <motion.div
-    className={`absolute whitespace-nowrap ${isImage ? '' : 'text-bloom text-[#FFF8EE]/60 font-bold tracking-widest'}`}
+    className={`absolute whitespace-nowrap ${isImage ? 'hidden md:block' : 'text-bloom text-[#FFF8EE]/60 font-bold tracking-widest'}`}
     style={{ top: `${top}%`, fontSize: isImage ? '1rem' : `${Math.random() * 1.5 + 1}rem`, zIndex: 0 }}
     initial={{ x: '100vw' }}
     animate={{ x: '-100vw' }}
@@ -135,7 +138,7 @@ const DanmakuItem = ({ text, top, duration, delay, isImage }: any) => (
   >
     {isImage ? (
       <div className="w-48 h-32 bg-gray-800 border border-[#FFF8EE]/20 rounded-lg overflow-hidden relative grayscale hover:grayscale-0 transition-all duration-500">
-        <img src={text} alt="Memory" className="w-full h-full object-cover opacity-60" />
+        <img src={text} loading="lazy" alt="Memory" className="w-full h-full object-cover opacity-60" />
         <div className="absolute inset-0 bg-blue-500/10 mix-blend-overlay"></div>
       </div>
     ) : (
@@ -464,12 +467,12 @@ const MasterpieceWallSection = () => {
   ];
 
   // 每一行打乱顺序，增加随机感
-  const row1 = [...works, ...works].sort(() => 0.5 - Math.random());
-  const row2 = [...works, ...works].sort(() => 0.5 - Math.random());
+  const row1 = [...works].sort(() => 0.5 - Math.random());
+  const row2 = [...works].sort(() => 0.5 - Math.random());
 
   return (
     <section id="masterpieces" className="py-32 bg-[#000000] relative overflow-hidden flex flex-col justify-center border-t border-white/5">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#FFF8EE]/5 rounded-full blur-[100px] pointer-events-none"></div>
+      <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#FFF8EE]/5 rounded-full blur-[100px] pointer-events-none"></div>
 
       <div className="text-center mb-16 relative z-10 px-6">
          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-bloom" style={{ fontFamily: "'Playfair Display', serif" }}>
@@ -480,12 +483,12 @@ const MasterpieceWallSection = () => {
           </p>
       </div>
 
-      <div className="relative w-full overflow-hidden flex flex-col gap-6 z-10 py-10 origin-center rotate-[-2deg]">
+      <div className="relative w-full overflow-hidden flex flex-col gap-6 z-10 py-10 origin-center md:rotate-[-2deg]">
         {/* 第一行动画 */}
-        <div className="flex w-[200%] gap-4 md:gap-6 animate-marquee flex-nowrap shrink-0 hover:[animation-play-state:paused]">
+        <div className="flex w-max gap-4 md:gap-6 animate-marquee flex-nowrap shrink-0 hover:[animation-play-state:paused]">
             {[...row1, ...row1].map((work, idx) => (
-                <div key={idx} className="relative w-56 h-36 md:w-72 md:h-44 rounded-xl overflow-hidden shrink-0 border border-white/10 shadow-lg grayscale hover:grayscale-0 transition-all duration-300 group">
-                    <img src={work.src} className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500" alt="Masterpiece Cover" />
+                <div key={idx} className="relative w-56 h-36 md:w-72 md:h-44 rounded-xl overflow-hidden shrink-0 border border-white/10 shadow-lg md:grayscale hover:grayscale-0 transition-all duration-300 group">
+                    <img src={work.src} loading="lazy" className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500" alt="Masterpiece Cover" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
                     <div className="absolute bottom-0 left-0 w-full p-3 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-sans text-xs text-[#FFF8EE]">
                       <div className="flex items-center gap-1">
@@ -505,10 +508,10 @@ const MasterpieceWallSection = () => {
             ))}
         </div>
         {/* 第二行动画 */}
-        <div className="flex w-[200%] gap-4 md:gap-6 animate-marquee-reverse flex-nowrap shrink-0 hover:[animation-play-state:paused]">
+        <div className="flex w-max gap-4 md:gap-6 animate-marquee-reverse flex-nowrap shrink-0 hover:[animation-play-state:paused]">
             {[...row2, ...row2].map((work, idx) => (
-                <div key={idx} className="relative w-56 h-36 md:w-72 md:h-44 rounded-xl overflow-hidden shrink-0 border border-white/10 shadow-lg grayscale hover:grayscale-0 transition-all duration-300 group">
-                    <img src={work.src} className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500" alt="Masterpiece Cover" />
+                <div key={idx} className="relative w-56 h-36 md:w-72 md:h-44 rounded-xl overflow-hidden shrink-0 border border-white/10 shadow-lg md:grayscale hover:grayscale-0 transition-all duration-300 group">
+                    <img src={work.src} loading="lazy" className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500" alt="Masterpiece Cover" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
                     <div className="absolute bottom-0 left-0 w-full p-3 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-sans text-xs text-[#FFF8EE]">
                       <div className="flex items-center gap-1">
